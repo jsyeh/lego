@@ -1,5 +1,7 @@
 float s = 8;
 ArrayList<PVector[]> pts = new ArrayList<PVector[]>();
+ArrayList<Integer> colors = new ArrayList<Integer>();
+color [] table = new color[32]; 
 void myReadDat(String filename){
   String filename2 = "";
   for(int i=0; i<filename.length(); i++){
@@ -16,6 +18,7 @@ void myReadDat(String filename){
         pt[i] = new PVector( float(a[2+i*3]), float(a[2+i*3+1]), float(a[2+i*3+2]) );
       }
       pts.add(pt);
+      colors.add(int(a[1]));
     } else if(a[0].equals("1")) {
       float [] m = new float[12];
       for(int i=0; i<12; i++) m[i] = float(a[2+i]);
@@ -40,6 +43,8 @@ void setup(){
   size(500,500,P3D);
   //myReadDat("stud4.dat");
   myReadDat("3626cp01.dat");
+  table[0] = #000000;
+  table[16] = #FFFF00;
 }
 void mouseDragged(){
   rotY += mouseX - pmouseX;
@@ -47,14 +52,24 @@ void mouseDragged(){
 }
 float rotX = 0, rotY = 180;
 void draw(){
+  lights();
   background(#FFFFF2);
   translate(width/2, height/2);
   rotateX(radians(rotX));
   rotateY(radians(rotY));
   //rotateX(radians(frameCount));
-  for(PVector [] pt : pts){
-    if(pt.length==2) beginShape(LINES);
-    else if(pt.length==3 || pt.length==4) beginShape();
+  for(int i=0; i<pts.size(); i++){
+  //for(PVector [] pt : pts){
+    PVector[] pt = pts.get(i);
+    Integer c = colors.get(i);
+    if(pt.length==2){
+      beginShape(LINES);
+      stroke(table[c]);
+    } else if(pt.length==3 || pt.length==4) {
+      beginShape();
+      noStroke();
+      fill(table[c]);
+    }
     for(PVector p : pt){
       vertex(p.x * s, p.y * s, p.z * s);
     }
