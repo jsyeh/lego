@@ -1,4 +1,4 @@
-float s = 10;
+float s = 8;
 ArrayList<PVector[]> pts = new ArrayList<PVector[]>();
 void myReadDat(String filename){
   String filename2 = "";
@@ -41,10 +41,17 @@ void setup(){
   //myReadDat("stud4.dat");
   myReadDat("3626cp01.dat");
 }
+void mouseDragged(){
+  rotY += mouseX - pmouseX;
+  rotX -= mouseY - pmouseY;
+}
+float rotX = 0, rotY = 180;
 void draw(){
   background(#FFFFF2);
   translate(width/2, height/2);
-  rotateX(radians(frameCount));
+  rotateX(radians(rotX));
+  rotateY(radians(rotY));
+  //rotateX(radians(frameCount));
   for(PVector [] pt : pts){
     if(pt.length==2) beginShape(LINES);
     else if(pt.length==3 || pt.length==4) beginShape();
