@@ -18,3 +18,13 @@
 # 相關的論文
 - SIGGRAPH Asia 2015 Legolization: Optimizing LEGO Designs
 - SIGGRAPH Asia 2023 Computational Design of LEGO® Sketch Art
+
+# LDraw 相關資料
+- Documentation: Colour Definition Reference
+  - https://www.ldraw.org/article/547.html
+- Documentation: LDraw.org Official Parts Library Specifications
+  - https://www.ldraw.org/article/512.html
+- Documentation: LDraw File Format Specification
+  - https://www.ldraw.org/article/218.html 
+  - https://www.ldraw.org/article/218.html#colour16
+
