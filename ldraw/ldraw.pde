@@ -12,8 +12,10 @@ void myReadDat(String filename){
     else filename2 += filename.charAt(i);
   }
   String [] lines = loadStrings("parts/" + filename2);
-  if(lines==null) lines = loadStrings("p/" + filename2);
-  if(lines==null) lines = loadStrings("models/" + filename2);
+  println("parts/" + filename2);
+  if(lines==null) {lines = loadStrings("p/48/" + filename2); println("p/48/" + filename2);}
+  if(lines==null) {lines = loadStrings("p/" + filename2); println("p/" + filename2); }
+  if(lines==null) {lines = loadStrings("models/" + filename2); println("models/" + filename2); }
   
   for(String line : lines){
     String [] a = split(line, " ");
@@ -73,7 +75,9 @@ void setup(){
   table2[24] = #333333;
   table2[32] = #333333;
   //myReadDat("stud4.dat");
-  myReadDat("3626cp01.dat");
+  //myReadDat("3626cp01.dat");
+  //myReadDat("3626bph9.dat");
+  myReadDat("3626cpb9.dat");
 }
 void mouseDragged(){
   rotY += mouseX - pmouseX;
