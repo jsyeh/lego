@@ -5,17 +5,21 @@ ArrayList<Integer> current_color = new ArrayList<Integer>(); //現在的色彩
 ArrayList<Integer> complement_color = new ArrayList<Integer>(); //現在的色彩，對應的互補色
 color [] table = new color[256];//主要的色彩(面） TODO:改大一點，但又不能太大
 color [] table2 = new color[256];//互補色（edge）的色彩
+String[] myLoadStrings(String filename){ 
+  File file = new File(dataPath(filename));
+  if(!file.exists()) return null;
+  else return loadStrings(filename);
+} //使用我的 myLoadStrings()減少 loadStrings()的錯誤訊息
 void myReadDat(String filename){
   String filename2 = "";
   for(int i=0; i<filename.length(); i++){
     if(filename.charAt(i)=='\\') filename2 += '/';
     else filename2 += filename.charAt(i);
   }
-  String [] lines = loadStrings("parts/" + filename2);
-  println("parts/" + filename2);
-  if(lines==null) {lines = loadStrings("p/48/" + filename2); println("p/48/" + filename2);}
-  if(lines==null) {lines = loadStrings("p/" + filename2); println("p/" + filename2); }
-  if(lines==null) {lines = loadStrings("models/" + filename2); println("models/" + filename2); }
+  String [] lines = myLoadStrings("parts/" + filename2);
+  if(lines==null) {lines = myLoadStrings("p/48/" + filename2);}
+  if(lines==null) {lines = myLoadStrings("p/" + filename2);}
+  if(lines==null) {lines = myLoadStrings("models/" + filename2);}
   
   for(String line : lines){
     String [] a = split(line, " ");
