@@ -17,16 +17,21 @@ void myReadDat(String filename){
     else filename2 += filename.charAt(i);
   }
   String [] lines = myLoadStrings("parts/" + filename2);
-  if(lines==null) {lines = myLoadStrings("p/48/" + filename2);}
+  //if(lines==null) {lines = myLoadStrings("p/48/" + filename2);} //先不要管精細的部分
   if(lines==null) {lines = myLoadStrings("p/" + filename2);}
   if(lines==null) {lines = myLoadStrings("models/" + filename2);}
   
   for(String line : lines){
     String [] a = split(line, " ");
-    if(a[0].equals("2")||a[0].equals("3")||a[0].equals("4")){
-      PVector[] pt = new PVector[int(a[0])];
-      for(int i=0; i<int(a[0]); i++){
-        pt[i] = new PVector( float(a[2+i*3]), float(a[2+i*3+1]), float(a[2+i*3+2]) );
+    if(a[0].equals("2")||a[0].equals("3")||a[0].equals("4")||a[0].equals("5")){
+      int ptN = int(a[0]);
+      PVector[] pt = new PVector[ptN]; //不是很好的寫法，還是準備了2,3,4,5個頂點，但5只用前4個
+      for(int i=0; i<ptN; i++){
+        if(ptN==5 && i==4){//特別針對輔助線 Line Type 5 其實只有 4 個頂點
+          pt[i] = new PVector(); //無用的點
+        }else{ //有用的點
+          pt[i] = new PVector( float(a[2+i*3]), float(a[2+i*3+1]), float(a[2+i*3+2]) );
+        }
       }
       pts.add(pt);
       if(int(a[1])==16){ //主要色
@@ -99,7 +104,7 @@ void draw(){
   //for(PVector [] pt : pts){
     PVector[] pt = pts.get(i);
     color c = colors.get(i); //直接放 color 色彩，不再放 CODE index
-    if(pt.length==2){
+    if(pt.length==2){ //請不要在這裡處理 Line Type 5
       beginShape(LINES);
       stroke(c); //改用正確的色彩
     } else if(pt.length==3 || pt.length==4) {
@@ -112,5 +117,20 @@ void draw(){
     }
     if(pt.length==2) endShape();
     else if(pt.length==3 || pt.length==4) endShape(CLOSE);
+  }
+
+  //想要畫 Line Type 5 Optional Line 輔助線(有時畫、有時不畫)
+  for(int i=0; i<pts.size(); i++){
+    PVector[] pt = pts.get(i);
+    color c = colors.get(i); //直接放 color 色彩，不再放 CODE index
+    if(pt.length==5){ //Line Type 5 只有前4個有效的頂點 點1 點2 輔助1 輔助2
+      beginShape(LINES);
+      stroke(c); //改用正確的色彩
+      for(int k=0; k<2; k++){ //只有前面2個頂點要畫
+        PVector p = pt[k];
+        vertex(p.x * s, p.y * s, p.z * s);
+      }
+      endShape();
+    }
   }
 }
