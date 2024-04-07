@@ -118,6 +118,16 @@ void draw(){
     if(pt.length==2) endShape();
     else if(pt.length==3 || pt.length==4) endShape(CLOSE);
   }
+  
+  //為了解決 Line Type 5 輔助線，我們需要找出幾個 Matrix，目前只找到 printMatrix()對應的matrix
+  printMatrix();
+  getMatrix((PMatrix3D) null).print();
+  //但是，我們找不到 modelview 這個 memeber obejct 的爸爸是誰
+  //modelview.print();
+  //那我們也就沒有辦法取出下面兩個 matrix
+  printCamera();
+  printProjection();
+  //這需要去追 Processing 的程式碼，但很容易迷路，下次再處理
 
   //想要畫 Line Type 5 Optional Line 輔助線(有時畫、有時不畫)
   for(int i=0; i<pts.size(); i++){
