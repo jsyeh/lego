@@ -126,22 +126,49 @@ void draw(){
   // 最後發現 PGraphicsOpenGL.java 有 modelview, camera, projection
   // 再找到 PApplet 裡有 PGraihcs g 結案
   PGraphics3D g = (PGraphics3D) this.g;
-  g.modelview.print(); //等價於 printMatrix();
-  g.camera.print(); //等價於 printCamera();
-  g.projection.print(); //等價於 prointProjection();
+  //g.modelview.print(); //等價於 printMatrix();
+  //g.camera.print(); //等價於 printCamera();
+  //g.projection.print(); //等價於 prointProjection();
+  //g.projmodelview.print();
 
   //想要畫 Line Type 5 Optional Line 輔助線(有時畫、有時不畫)
   for(int i=0; i<pts.size(); i++){
     PVector[] pt = pts.get(i);
     color c = colors.get(i); //直接放 color 色彩，不再放 CODE index
     if(pt.length==5){ //Line Type 5 只有前4個有效的頂點 點1 點2 輔助1 輔助2
+      strokeWeight(1);
+      strokeCap(ROUND);
+      strokeJoin(ROUND);
       beginShape(LINES);
       stroke(c); //改用正確的色彩
-      for(int k=0; k<2; k++){ //只有前面2個頂點要畫
-        PVector p = pt[k];
-        vertex(p.x * s, p.y * s, p.z * s);
+      if(checkType5matrix(pt)){
+        //line(pt[0].x, pt[0].y, pt[0].z, pt[1].x, pt[1].y, pt[1].z);
+        for(int k=0; k<2; k++){ //只有前面2個頂點要畫
+          PVector p = pt[k];
+          vertex(p.x * s, p.y * s, p.z * s);
+        }
       }
       endShape();
     }
   }
+}
+PVector myMult(PMatrix3D m, PVector p){
+  PVector ans = new PVector();
+  m.mult(p, ans);
+  return ans;
+}
+boolean checkType5matrix(PVector [] p){
+  PVector [] p2 = new PVector[4];
+  PGraphics3D g = (PGraphics3D) this.g;
+  for(int i=0; i<4; i++){
+    p2[i] = myMult(g.projmodelview, p[i]);
+  }
+  return checkType5(p2);
+}
+boolean checkType5(PVector [] p){ //input是2D
+  float x1 = p[0].x, y1 = p[0].y;
+  float x2 = p[1].x, y2 = p[1].y;
+  float a = -(y2-y1), b = (x2-x1), c = -y1 * (x2-x1) + x1 *  (y2-y1);
+  // Step02-2 另外2點是控制點(代入方程式，看是否同向)
+  return (a * p[2].x + b * p[2].y + c) * (a * p[3].x + b * p[3].y + c) >= 0;
 }
